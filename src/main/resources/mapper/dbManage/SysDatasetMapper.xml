@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciic.reporter.dbManage.mapper.SysDatasetMapper">
+    <select id="queryDataSetList"  resultType="java.util.LinkedHashMap">
+        SELECT s.`ds_name`,sds.`db_code`,s.`ds_type`,sd.`table_id`,sd.`field_id`,sd.`sort` FROM sys_dataset s LEFT JOIN
+        sys_datasource sds ON s.`db_source_id`=sds.`id` LEFT JOIN sys_dataset_detail sd ON s.`ds_id`=sd.`id`
+    </select>
+
+    <select id="queryTreeList" resultType="java.util.LinkedHashMap">
+        SELECT s.`ds_name` as lable FROM sys_dataset s
+    </select>
+</mapper>
