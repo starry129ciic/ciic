@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -26,8 +27,7 @@ import java.util.Properties;
 
 @EnableTransactionManagement
 @Configuration
-@MapperScan("com.baomidou.mybatisplus.core.mapper")
-@MapperScan("com.ciic.reporter.*.mapper")
+@MapperScan("com.ciic.reporter.**.mapper")
 public class DataSourceHandler {
     @Bean
     public PaginationInterceptor paginationInterceptor() {
@@ -123,6 +123,8 @@ public class DataSourceHandler {
                 paginationInterceptor()
         });
 //        sqlSessionFactory.setGlobalConfig(globalConfiguration()); //注释掉全局配置，因为在xml中读取就是全局配置
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        sqlSessionFactory.setMapperLocations(resolver.getResources("classpath*:/mapper/**/*.xml"));
         return sqlSessionFactory.getObject();
     }
 
