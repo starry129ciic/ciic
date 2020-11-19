@@ -36,5 +36,10 @@ public class SysDatasetServiceImpl extends ServiceImpl<SysDatasetMapper, SysData
         return treeList;
     }
 
+    @Override
+    public List queryDataByTreeKey(String dataSetId) {
+        List dsList = sysDatasetMapper.queryDataByTreeKey(dataSetId);
+        return dsList;
+    }
 
 }

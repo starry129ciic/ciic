@@ -26,4 +26,10 @@ public interface ISysDatasetService extends IService<SysDataset> {
      */
     List queryTreeList();
 
+    /**
+     * 通过数据集树查看数据集列表
+     * @param dataSetId
+     * @return
+     */
+    List queryDataByTreeKey(String dataSetId);
 }

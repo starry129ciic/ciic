@@ -32,7 +32,8 @@ public class ShowDataController {
         // 输入参数验证
         String error = checkDataSid(datasid);
         if (error != null) return error;
-        String mainDetialRP = "select * from rp_main_detial where rp_main_id='" + datasid + "' and status=0 order by detial_order";
+        //order by detial_order
+        String mainDetialRP = "select * from report_show where dataset_id='" + datasid + "' and statues=0";
         List<Map<String, Object>> mainDetialRPL = dataService.getData("first", mainDetialRP);
         return JSONUtils.toJSONString(mainDetialRPL);
     }
@@ -71,19 +72,19 @@ public class ShowDataController {
         }
 
         //找到需要执行的所有语句并执行。
-        String mainRP = "select * from rp_main where code='" + datasid + "'";
+        String mainRP = "select * from sys_report_data sp, report_show p  where sp.id=p.report_id and code='" + datasid + "'";
         List<Map<String, Object>> mainRPL = dataService.getData("first", mainRP);
         Map<String, Object> mainSqlMap = mainRPL.get(0);
         String datasource_id = mainSqlMap.get("datasource_id") == null ? "" : mainSqlMap.get("datasource_id").toString();
-        String beSql = mainSqlMap.get("be_sql") == null ? "" : mainSqlMap.get("be_sql").toString();
-        String mainSql = mainSqlMap.get("main_sql") == null ? "" : mainSqlMap.get("main_sql").toString();
-        String endSql = mainSqlMap.get("end_sql") == null ? "" : mainSqlMap.get("end_sql").toString();
-        String[] beSqlList = beSql.split(";");
-        for (String tempSql : beSqlList) {
-            if (!StringUtils.isEmpty(tempSql)) {
-                dataService.getData(datasource_id, tempSql);
-            }
-        }
+//        String beSql = mainSqlMap.get("be_sql") == null ? "" : mainSqlMap.get("be_sql").toString();
+        String mainSql = mainSqlMap.get("report_select_sql") == null ? "" : mainSqlMap.get("report_select_sql").toString();
+//        String endSql = mainSqlMap.get("end_sql") == null ? "" : mainSqlMap.get("end_sql").toString();
+//        String[] beSqlList = beSql.split(";");
+//        for (String tempSql : beSqlList) {
+//            if (!StringUtils.isEmpty(tempSql)) {
+//                dataService.getData(datasource_id, tempSql);
+//            }
+//        }
         //组装where条件
         String where = "";
         //查询主数据的条件
@@ -115,17 +116,17 @@ public class ShowDataController {
             }
         }
 
-        mainSql = "select * from (" + mainSql + ") a where 1=1 " + where + " limit " + ((page - 1) * limit) + "," + (page * limit);
-
-        List<Map<String, Object>> dataList = dataService.getData(datasource_id, mainSql);
-        String[] endSqlList = endSql.split(";");
+        mainSql = mainSql.replace("{{where}}",where);
 
         int count = 10;
-        for (String tempSql : endSqlList) {
-            if (!StringUtils.isEmpty(tempSql)) {
-                count = Integer.parseInt(dataService.getData(datasource_id, tempSql).get(0).get("dcount").toString());
-            }
+        String selectCountsSql = "select count(*) AS decount from (" +  mainSql + ") a";
+        if (!StringUtils.isEmpty(selectCountsSql)) {
+            count = Integer.parseInt(dataService.getData(datasource_id, selectCountsSql).get(0).get("decount").toString());
         }
+
+        String endSql = mainSql + " limit " + ((page - 1) * limit) + "," + (page * limit);
+
+        List<Map<String, Object>> dataList = dataService.getData(datasource_id, endSql);
         Map resultEntity = new HashMap<String, Object>();
         resultEntity.put("code", 0);
         resultEntity.put("msg", "");

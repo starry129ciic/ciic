@@ -2,8 +2,7 @@ package com.ciic.reporter.dbManage.mapper;
 
 import com.ciic.reporter.dbManage.entity.SysDataset;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -28,4 +27,17 @@ public interface SysDatasetMapper extends BaseMapper<SysDataset> {
      * @return
      */
     List queryTreeList();
+
+    /**
+     * 查询数据库编码
+     * @return
+     */
+    List queryCodeList();
+
+    /**
+     * 根据数据集树查询数据集列表
+     * @param dataSetId
+     * @return
+     */
+    List queryDataByTreeKey(@Param("id") String dataSetId);
 }

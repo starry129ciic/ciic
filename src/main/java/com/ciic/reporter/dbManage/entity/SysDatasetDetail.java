@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.sun.javafx.beans.IDProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,9 +23,13 @@ public class SysDatasetDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String id;//主键id
+
     private String dsId;//数据集id
 
     private String tableId;//表id
+
+    private String tableName;//表名
 
     private String fieldId;//字段编码
 

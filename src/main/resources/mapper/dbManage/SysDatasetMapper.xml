@@ -7,6 +7,20 @@
     </select>
 
     <select id="queryTreeList" resultType="java.util.LinkedHashMap">
-        SELECT s.`ds_name` as lable FROM sys_dataset s
+        SELECT s.`ds_name` as label,s.id FROM sys_dataset s
     </select>
+
+    <select id="queryDataByTreeKey" resultType="java.util.LinkedHashMap">
+                        SELECT t1.id,
+        t1.ds_name ,
+        t2.field_name ,
+        t3.db_name  ,
+        t1.ds_type ,
+        t2.table_id ,
+        t2.field_id ,
+        t2.sort
+        FROM `sys_dataset` t1 join sys_dataset_detail t2 on t1.id=t2.ds_id
+        join sys_datasource t3 on t1.db_source_id=t3.id where t1.id=#{id}
+    </select>
+
 </mapper>

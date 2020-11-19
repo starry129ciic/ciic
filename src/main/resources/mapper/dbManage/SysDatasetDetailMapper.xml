@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ciic.reporter.dbManage.mapper.SysDatasetDetailMapper">
+    <select id="queryColList" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
+        ${sqlContent}
+    </select>
+    <update id="updateDatasetDetail" parameterType="java.lang.String">
+        UPDATE sys_dataset_detail sd SET
+        <if test="fieldId != null and fieldId != ''">
+            sd.field_id=#{fieldId},
+        </if>
+        <if test="fieldName != null and fieldName != ''">
+            sd.field_name=#{fieldName},
+        </if>
+        <if test="fieldEnName != null and fieldEnName != ''">
+            sd.field_en_name=#{fieldEnName},
+        </if>
+        <if test="fieldChEnName != null and fieldChEnName != ''">
+            sd.field_ch_en_name=#{fieldChEnName},
+        </if>
+         WHERE sd.id=#{id}
+    </update>
+
 
 </mapper>
