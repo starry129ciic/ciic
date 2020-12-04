@@ -9,4 +9,8 @@ public interface IDataService {
      * @return
      */
     public List<Map<String, Object>> getData(String dataSourceId,String sql);
+
+    public void addData(String dataSourceId, String sql);
+
+    List<Map<String, Object>> getDataPage(String second, String sql, Long current, Long size);
 }

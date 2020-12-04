@@ -30,18 +30,15 @@ public class SysDatasetDetailServiceImpl extends ServiceImpl<SysDatasetDetailMap
     }
 
     @Override
-    public void updateDatasetDetail(SysDatasetDetail sysDatasetDetail) {
-        //主键id
-        String id = sysDatasetDetail.getId();
-        //字段标识
-        String fieldId = sysDatasetDetail.getFieldId();
-        //字段名称
-        String fieldName = sysDatasetDetail.getFieldName();
-        //字段英文名称
-        String fieldEnName = sysDatasetDetail.getFieldEnName();
-        //字段中英文名称
-        String fieldChEnName = sysDatasetDetail.getFieldChEnName();
-        sysDatasetDetailMapper.updateDatasetDetail(fieldId, fieldName, fieldEnName, fieldChEnName, id);
+    public List queryDataTableList(String dsId) {
+        List list = sysDatasetDetailMapper.queryDataTableList(dsId);
+        return list;
+    }
+
+    @Override
+    public List querydsIdByid(String id) {
+        List list = sysDatasetDetailMapper.querydsIdByid(id);
+        return list;
     }
 
 }

@@ -4,22 +4,11 @@
     <select id="queryColList" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
         ${sqlContent}
     </select>
-    <update id="updateDatasetDetail" parameterType="java.lang.String">
-        UPDATE sys_dataset_detail sd SET
-        <if test="fieldId != null and fieldId != ''">
-            sd.field_id=#{fieldId},
-        </if>
-        <if test="fieldName != null and fieldName != ''">
-            sd.field_name=#{fieldName},
-        </if>
-        <if test="fieldEnName != null and fieldEnName != ''">
-            sd.field_en_name=#{fieldEnName},
-        </if>
-        <if test="fieldChEnName != null and fieldChEnName != ''">
-            sd.field_ch_en_name=#{fieldChEnName},
-        </if>
-         WHERE sd.id=#{id}
-    </update>
+    <select id="queryDataTableList" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
+        SELECT s.`table_id`,s.`table_name`,s.`id`,s.`field_id`,s.`field_name`,s.`field_en_name`,s.`field_ch_en_name`,s.`ds_id` FROM sys_dataset_detail s WHERE s.`ds_id`= #{dsId}
+    </select>
 
-
+    <select id="querydsIdByid" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
+        SELECT s.`ds_id` FROM sys_dataset_detail s WHERE s.`id`= #{id}
+    </select>
 </mapper>

@@ -38,7 +38,7 @@ public class ShowController {
             return "error";
         }
         //找到需要执行的所有语句并执行。
-        String mainRP = "select * from sys_report_data where code='" + datasid + "' and status=0";
+        String mainRP = "select * from rp_main where code='" + datasid + "' and status=0";
         List<Map<String, Object>> mainRPL = dataService.getData("first", mainRP);
         Map<String, Object> mainSqlMap = mainRPL.get(0);
 

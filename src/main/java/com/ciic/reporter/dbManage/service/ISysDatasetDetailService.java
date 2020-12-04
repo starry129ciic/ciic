@@ -22,8 +22,15 @@ public interface ISysDatasetDetailService extends IService<SysDatasetDetail> {
     List queryColList(String sqlContent);
 
     /**
-     * 修改字段展示名称保存
-     * @param sysDatasetDetail
+     * 根据数据集id查询客户查询、sql查询页面数据
+     * @param dsId
      */
-    void updateDatasetDetail(SysDatasetDetail sysDatasetDetail);
+    List queryDataTableList(String dsId);
+
+    /**
+     * 查询数据集id by id
+     * @param id
+     * @return
+     */
+    List querydsIdByid(String id);
 }

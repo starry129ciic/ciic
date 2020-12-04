@@ -69,14 +69,14 @@ public class SysDatasourceController {
             String url = sysDatasource.getDbLink();//连接字符串
             String userName = sysDatasource.getDbUsername();//用户名
             String password = sysDatasource.getDbPassword();//密码
-            Class.forName(driver);//加载数据驱动
-            conn = DriverManager.getConnection(url, userName, password);// 连接数据库
+            if (!"".equals(driver) && driver != null) {
+                Class.forName(driver);//加载数据驱动
+                conn = DriverManager.getConnection(url, userName, password);// 连接数据库
+            }
             System.out.println(conn);
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
 //            message = "连接失败！";
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         if (conn != null) {
             message = "连接成功！";

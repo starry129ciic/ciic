@@ -3,6 +3,7 @@ package com.ciic.reporter.dbManage.mapper;
 import com.ciic.reporter.dbManage.entity.SysDatasetDetail;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Property;
 
 import java.util.List;
 
@@ -24,9 +25,16 @@ public interface SysDatasetDetailMapper extends BaseMapper<SysDatasetDetail> {
     List queryColList(String sqlContent);
 
     /**
-     * 修改字段展示名称保存
-     * @param id
+     * 查询“客户查询”页面数据
+     * @param dsId
+     * @return
      */
-    void updateDatasetDetail(@Param("id") String id, @Param("field_id") String fieldId, @Param("field_name") String fieldName, @Param("field_en_name") String fieldEnName, @Param("field_ch_en_name") String fieldChEnName);
+    List queryDataTableList(@Param("dsId") String dsId);
 
+    /**
+     * 查询数据集id by id
+     * @param id
+     * @return
+     */
+    List querydsIdByid(@Param("id") String id);
 }

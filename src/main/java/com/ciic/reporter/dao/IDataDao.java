@@ -12,4 +12,12 @@ public interface IDataDao {
      * @return
      */
      List<Map<String, Object>> getData(String sql);
+
+    /**
+     * 新增数据
+     * @param sql
+     */
+    void addData(String sql);
+
+    List<Map<String, Object>> getDataPage(String sql, Long current, Long size);
 }

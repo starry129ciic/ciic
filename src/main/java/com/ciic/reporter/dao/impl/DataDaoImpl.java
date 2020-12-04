@@ -16,6 +16,35 @@ public class DataDaoImpl implements IDataDao {
     private DataSource dataSource;
 
     /**
+     * 添加数据
+     * @param sql
+     */
+    public void addData(String sql) {
+        Connection con=null;
+        try {
+            //获取数据库中的数据源配置
+            con=dataSource.getConnection();
+            Statement st=con.createStatement();
+            st.execute(sql);
+            st.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if(con!=null)
+            {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    /**
      * 获取数据
      * @param sql
      * @return
@@ -47,6 +76,35 @@ public class DataDaoImpl implements IDataDao {
         }
         return result;
     }
+
+    @Override
+    public List<Map<String, Object>> getDataPage(String sql, Long current, Long size) {
+        Connection con=null;
+        List<Map<String, Object>> result=new ArrayList<Map<String, Object>>();
+        try {
+            //获取数据库中的数据源配置
+            con=dataSource.getConnection();
+            Statement st=con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            result=convertList(rs);
+            st.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if(con!=null)
+            {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
 
     /**
      * 将ResultSet转换成MAP

@@ -49,7 +49,7 @@ public class DataSourceHandler {
     }
 
     @Bean
-    @ConfigurationProperties("spring.datasource.druid.db2")
+    @ConfigurationProperties("spring.datasource.druid.db3")
     public DataSource secondDataSource() {
         return DruidDataSourceBuilder.create().build();
     }
@@ -67,24 +67,24 @@ public class DataSourceHandler {
             //获取数据库中的数据源配置
             con=ds.getConnection();
             Statement st=con.createStatement();
-            ResultSet rs = st.executeQuery("select * from datasource where status=0");
-            while (rs.next()) {
-                Properties properties = new Properties();
-                properties.setProperty("url",rs.getString("url"));
-                properties.setProperty("username",rs.getString("username"));
-                properties.setProperty("password",rs.getString("password"));
-                properties.setProperty("driverClassName",rs.getString("driver_class_name"));
-                properties.setProperty("initialSize",rs.getString("initialSize"));
-                properties.setProperty("minIdle",rs.getString("minIdle"));
-                properties.setProperty("maxActive",rs.getString("maxActive"));
-                DataSource dataSource = null;
-                try {
-                    dataSource=DruidDataSourceFactory.createDataSource(properties);
-                }catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                ResultSet rs = st.executeQuery("select * from sys_datasource where status=0");
+                while (rs.next()){
+                    Properties properties = new Properties();
+                    properties.setProperty("dbLink",rs.getString("db_link"));
+                    properties.setProperty("dbUserName",rs.getString("db_username"));
+                    properties.setProperty("dbPassword",rs.getString("db_password"));
+                    properties.setProperty("dbDriver",rs.getString("db_driver"));
+                    properties.setProperty("dbInitalLinkCounts",rs.getString("db_inital_link_counts"));
+                    properties.setProperty("dbMinimumLinkCounts",rs.getString("db_minimum_link_counts"));
+                    properties.setProperty("dbMaximumLinkCounts",rs.getString("db_maximum_link_counts"));
+                    DataSource dataSource = null;
+                    try {
+                        dataSource=DruidDataSourceFactory.createDataSource(properties);
+                    }catch (SQLException throwables){
+                        throwables.printStackTrace();
+                    }
+                    dynamicDataSource.myMap.put(rs.getString("db_code"),DruidDataSourceFactory.createDataSource(properties));
                 }
-                dynamicDataSource.myMap.put(rs.getString("data_source_code"), DruidDataSourceFactory.createDataSource(properties));
-            }
             rs.close();
             st.close();
         } catch (SQLException throwables) {

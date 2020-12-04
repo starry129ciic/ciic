@@ -5,15 +5,23 @@ spring:
     auto: true
   datasource:
     druid:
-      # 数据库 1
+     # 数据库 1
       db1:
-        url: jdbc:mysql://127.0.0.1:3306/db1?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
-        username: root
-        password: root
+        url: jdbc:mysql://192.168.10.233:3306/db1?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
+        username: ciic-wage
+        password: ciic-wage
         driver-class-name: com.mysql.cj.jdbc.Driver
         initialSize: 5
         minIdle: 5
         maxActive: 20
+#      db1:
+#        url: jdbc:mysql://localhost:3306/db1?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
+#        username: root
+#        password: root
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        initialSize: 5
+#        minIdle: 5
+#        maxActive: 20
       # 配置DruidStatViewServlet
       stat-view-servlet:
         url-pattern: "/druid/*"
@@ -28,10 +36,10 @@ spring:
         # 登录密码
         login-password: 123456
       # 数据库 2
-      db2:
-        url: jdbc:mysql://127.0.0.1:3306/db2?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
-        username: root
-        password: root
+      db3:
+        url: jdbc:mysql://192.168.10.233:3306/db3?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
+        username: ciic-wage
+        password: ciic-wage
         driver-class-name: com.mysql.cj.jdbc.Driver
         initialSize: 5
         minIdle: 5
@@ -41,6 +49,7 @@ spring:
     suffix: .html
     cache: false
 mybatis-plus:
+  typeAliasesPackage: com.ciic.reporter.**.entity.**
   mapper-locations: classpath*:/mapper/**/*.xml
 #==  log  ===
 logging:

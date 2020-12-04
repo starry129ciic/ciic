@@ -19,6 +19,8 @@ public class SysDataset implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String id;//主键id
+
     private String dbSourceId;//数据源id
 
     private String dsId;//数据集id
@@ -43,7 +45,8 @@ public class SysDataset implements Serializable {
 
     private String cusId;//客户id
 
-    private String branchId;
+    private String cusName;//客户名称
 
+    private String branchId;
 
 }
