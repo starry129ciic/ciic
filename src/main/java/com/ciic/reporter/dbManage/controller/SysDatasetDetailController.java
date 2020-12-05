@@ -2,6 +2,7 @@ package com.ciic.reporter.dbManage.controller;
 
 
 import com.baomidou.mybatisplus.core.enums.SqlLike;
+import com.ciic.reporter.common.StatusEnum;
 import com.ciic.reporter.cusmain.entity.CusMain;
 import com.ciic.reporter.dbManage.entity.SysDataset;
 import com.ciic.reporter.dbManage.entity.SysDatasetDetail;
@@ -166,7 +167,7 @@ public class SysDatasetDetailController {
             sysDatasetDetail.setDsId(dsId);
         }
         sysDatasetDetail.setCreateDate(now());
-        sysDatasetDetail.setStatus("1");
+        sysDatasetDetail.setStatus(StatusEnum.NOMAL);
         sysDatasetDetailService.save(sysDatasetDetail);
         return dsId;
     }
@@ -182,10 +183,11 @@ public class SysDatasetDetailController {
 
     @PostMapping("/analysSql")
     @ResponseBody
-    public List analysSql(@RequestBody String sqlContent) {
+    public List analysSql(@RequestBody Map params) {
+        String sqlContent=""+params.get("sqlContent");
+        String dbCode=""+params.get("dbCode");
         List colList = new ArrayList();
         List queryColList = new ArrayList();
-        List sqlList = new ArrayList();
         String dsId = "";
         SysDatasetDetail sysDatasetDetail = new SysDatasetDetail();
         sysDatasetDetail.setCreateDate(now());
@@ -194,20 +196,16 @@ public class SysDatasetDetailController {
         if (sqlContentValue != null && !"".equals(sqlContentValue)) {
             String sqlContentChild = sqlContentValue.substring(sqlContentValue.indexOf("select") + 6, sqlContentValue.indexOf("from") - 1);
             if ("*".equals(sqlContentChild.trim())) {
-                List list = sysDatasetDetailService.queryColList(sqlContentValue);
+                List list = dataService.getData(dbCode,sqlContent +" limit 0,1");
                 if (list != null && list.size() > 0) {
                     Map<String, String> colMap = (Map) list.get(0);
                     for (Object key : colMap.keySet()) {
                         String id = UUID.randomUUID().toString().replace("-", "");
-//                        sysDatasetDetail.setId(id);
-//                        sysDatasetDetail.setFieldId((String)key);
-                        String sql = "INSERT INTO sys_dataset_detail VALUES('"+ id +"','"+  dsId +"',NULL,NULL,'" + key + "',NULL,NULL,NULL,NULL,'1',NULL,'" + now()+ "',NULL,NULL,NULL)";
                         Map map = new HashMap();
                         map.put("id", id);
-                        map.put("field_id", key);
+                        map.put("field_id", key.toString().toUpperCase());
                         map.put("ds_id", dsId);
                         queryColList.add(map);
-                        sqlList.add(sql);
                     }
                 }
             } else {
@@ -216,30 +214,21 @@ public class SysDatasetDetailController {
                     Map fieldMap = new HashMap();
                     if (StringUtils.isNotEmpty(col) && col.indexOf("as") == -1) {
                         String id = UUID.randomUUID().toString().replace("-", "");
-                        String sql = "INSERT INTO sys_dataset_detail VALUES('"+ id +"','"+  dsId +"',NULL,NULL,'" + col + "',NULL,NULL,NULL,NULL,'1',NULL,'" + now()+ "',NULL,NULL,NULL)";
-                        fieldMap.put("field_id", col);
+                        fieldMap.put("field_id", col.toUpperCase());
                         fieldMap.put("id", id);
                         fieldMap.put("ds_id",dsId);
                         colList.add(fieldMap);
-                        sqlList.add(sql);
                     } else {
                         col = col.substring(col.indexOf("as") + 2, col.length()).trim();
                         String id = UUID.randomUUID().toString().replace("-", "");
-                        String sql = "INSERT INTO sys_dataset_detail VALUES('"+ id +"','"+  dsId +"',NULL,NULL,'" + col + "',NULL,NULL,NULL,NULL,'1',NULL,'" + now()+ "',NULL,NULL,NULL)";
-                        fieldMap.put("field_id", col);
+                        fieldMap.put("field_id", col.toUpperCase());
                         fieldMap.put("id", id);
                         fieldMap.put("ds_id", dsId);
                         colList.add(fieldMap);
-                        sqlList.add(sql);
                     }
                 }
             }
         }
-//        if (sqlList != null && sqlList.size() > 0) {
-//            for (int i = 0; i < sqlList.size(); i++) {
-//                dataService.addData("first", (String) sqlList.get(i));
-//            }
-//        }
         if (queryColList != null && queryColList.size() > 0) {
             return queryColList;
         }

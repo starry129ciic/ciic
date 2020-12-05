@@ -37,42 +37,30 @@
                 method:"post",
                 dataType : 'json',
                 success : function(data) {
-                    for (var i = 0;i < data.length; i++){
+                    for (var i = 0;i < data.length; i++) {
+
                         var obj = '0';
-                        if('cn'==lang){
-                            obj=data[i].col_name;
-                        }else if('en'==lang)
-                        {
-                            obj=data[i].col_en_name;
-                        }else if('cnen'==lang)
-                        {
-                            obj=data[i].col_ch_en_name;
+                        if ('cn' == lang) {
+                            obj = data[i].col_name;
+                        } else if ('en' == lang) {
+                            obj = data[i].col_en_name;
+                        } else if ('cnen' == lang) {
+                            obj = data[i].col_ch_en_name;
                         }
-                        var wid=data[i].per_visible;
-                        if(wid==undefined)
-                        {
-                            wid=100/data.length;
+                        var wid = data[i].per_visible;
+                        if (wid == undefined) {
+                            wid = 10;
                         }
-                        // if(data[i].isvisible!=undefined&&data[i].isvisible==1) {
-                            if (obj != '0') {
-                        //         if(obj=='操作'||obj=='operation'||obj=='操作 operation'){
-                        //             mycols[i] = {fixed: 'right', title:obj, toolbar: '#barDemo', width:wid + '%'};
-                        //         }else {
-                                    mycols[i] = {field: data[i].col_id, title: obj, align: 'center', width: wid + '%'};
-                                }
-                        //     }
-                        // }
-                        // if(data[i].iscondition!=undefined&&data[i].iscondition==1)
-                        // {
-                            if (obj != '0') {
-                                // if(data[i].code_type!=undefined) {
-                            // , edit: data[i].edit,templet: data[i].templet,layVerify: data[i].layVerify
-                                    dataFields[i] = {field: data[i].col_id, title: obj, edit:'text'};
-                                // }
+                        if (obj != '0') {
+                            if(data[i].col_type=='2'||data[i].col_type=='3')
+                            {
+                                mycols[mycols.length] = {field: data[i].col_id, title: obj, align: 'center', width: wid + '%'};
+                            }
+                            else if(data[i].col_type=='1') {
+                                dataFields[i] = {field: data[i].col_id, title: obj, edit: 'text'};
                             }
                         }
-
-                    // }
+                    }
                     var dc = dynamicCondition.create({
                         //通过容器选择器传入，也可以$("#dynamicCondition"),或者document.getElementById("dynamicCondition")
                         fields : dataFields,
@@ -129,7 +117,7 @@
     </script>
 </head>
 <body class="layui-layout-body">
-<div id="contentdiv" class="layui-container">
+<div id="contentdiv" >
 <!--    <div id="headdiv"  th:utext="${headdiv}" class="layui-row">-->
 <!--    </div>-->
     <div style="padding-top: 5px;">

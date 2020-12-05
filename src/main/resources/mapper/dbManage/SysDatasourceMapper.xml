@@ -6,13 +6,14 @@
         sds.`db_driver`,sds.`db_inital_link_counts`,sds.`db_minimum_link_counts`,sds.`db_maximum_link_counts`,
         sds.`status`,sds.`create_by`,sds.`create_date`,sds.`update_by`,sds.`update_date`,sds.`remarks`
          FROM sys_datasource sds WHERE sds.`id` IN (SELECT s.`db_source_id` FROM sys_dataset s WHERE s.`id`= #{id} )
+         and status=0
     </select>
 
     <select id="queryCodeList" resultType="java.util.LinkedHashMap">
-        SELECT s.db_code dbCode FROM sys_datasource s
+        SELECT s.db_code dbCode FROM sys_datasource s where status=0
     </select>
 
     <select id="queryDataSourceByCode" resultType="java.util.LinkedHashMap">
-        SELECT * FROM sys_datasource s WHERE s.`db_code`= #{db_code}
+        SELECT * FROM sys_datasource s WHERE s.`db_code`= #{db_code} and status=0
     </select>
 </mapper>

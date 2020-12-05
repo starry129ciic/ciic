@@ -70,13 +70,13 @@ public class DataSourceHandler {
                 ResultSet rs = st.executeQuery("select * from sys_datasource where status=0");
                 while (rs.next()){
                     Properties properties = new Properties();
-                    properties.setProperty("dbLink",rs.getString("db_link"));
-                    properties.setProperty("dbUserName",rs.getString("db_username"));
-                    properties.setProperty("dbPassword",rs.getString("db_password"));
-                    properties.setProperty("dbDriver",rs.getString("db_driver"));
-                    properties.setProperty("dbInitalLinkCounts",rs.getString("db_inital_link_counts"));
-                    properties.setProperty("dbMinimumLinkCounts",rs.getString("db_minimum_link_counts"));
-                    properties.setProperty("dbMaximumLinkCounts",rs.getString("db_maximum_link_counts"));
+                    properties.setProperty("url",rs.getString("db_link"));
+                    properties.setProperty("username",rs.getString("db_username"));
+                    properties.setProperty("password",rs.getString("db_password"));
+                    properties.setProperty("driverClassName",rs.getString("db_driver"));
+                    properties.setProperty("initialSize",rs.getString("db_inital_link_counts"));
+                    properties.setProperty("minIdle",rs.getString("db_minimum_link_counts"));
+                    properties.setProperty("maxActive",rs.getString("db_maximum_link_counts"));
                     DataSource dataSource = null;
                     try {
                         dataSource=DruidDataSourceFactory.createDataSource(properties);

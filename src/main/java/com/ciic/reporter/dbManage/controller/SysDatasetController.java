@@ -1,6 +1,10 @@
 package com.ciic.reporter.dbManage.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ciic.reporter.common.StatusEnum;
 import com.ciic.reporter.dbManage.entity.SysDataset;
 import com.ciic.reporter.dbManage.entity.SysDatasetDetail;
 import com.ciic.reporter.dbManage.entity.SysDatasource;
@@ -11,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 import static java.time.LocalDate.now;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 /**
  * <p>
@@ -33,8 +37,7 @@ public class SysDatasetController {
     private ISysDatasetService sysDatasetService;
     @Autowired
     private ISysDatasetDetailService sysDatasetDetailService;
-//    @Autowired
-//    private SysDataset sysDataset;
+
 
     @GetMapping("/query")
     @ResponseBody
@@ -64,16 +67,69 @@ public class SysDatasetController {
     //Sql查询页面保存
     @PostMapping("/saveInfo")
     @ResponseBody
-    public List saveInfo(@RequestBody SysDataset sysDataset){
-        String dsId = sysDataset.getDsId();
-        List list = new ArrayList();
-        if (dsId != null && !"".equals(dsId)) {
-            list = sysDatasetDetailService.queryDataTableList(dsId);
+    public void saveInfo(@RequestBody Object sysDataset){
+        LinkedHashMap<String,Object> input=(LinkedHashMap<String,Object>)sysDataset;
+        if(input==null||input.size()<1)
+        {
+            return;
         }
-        sysDataset.setCreateDate(now());
-        sysDatasetService.save(sysDataset);
-        return list;
+        //从前台获取报表的Id
+        String dsId=input.get("dsId")==null?UUID.randomUUID().toString():input.get("dsId").toString();
+        SysDataset dataset=new SysDataset();
+        dataset.setId(dsId);
+        dataset.setDsId(input.get("sql")==null?"":input.get("sql").toString());
+        dataset.setDbSourceId(input.get("querydbCode")==null?"":input.get("querydbCode").toString());
+        dataset.setDsName(input.get("dsName")==null?"":input.get("dsName").toString());
+        dataset.setDsType(input.get("dsType")==null?"":input.get("dsType").toString());
+        dataset.setSort(input.get("sort")==null?"0":input.get("sort").toString());
+        dataset.setStatus(StatusEnum.NOMAL);
+        dataset.setCreateDate(LocalDate.now());
+        dataset.setRemarks(input.get("remark")==null?"":input.get("remark").toString());
+        dataset.setCusId(input.get("cusId")==null?"":input.get("cusId").toString());
+        dataset.setCusName(input.get("cusName")==null?"":input.get("cusName").toString());
+        dataset.setBranchId(input.get("branchId")==null?"":input.get("branchId").toString());
+
+        List<SysDatasetDetail> sqlList=new ArrayList<SysDatasetDetail>();
+        for(String tempKey:input.keySet()) {
+            if(tempKey.startsWith("defineData")) {
+                Map<String ,Object> map=(Map<String,Object>) JSON.parse(input.get(tempKey).toString());
+                if(map==null)
+                {
+                    continue;
+                }
+                SysDatasetDetail detail = new SysDatasetDetail();
+                detail.setId(map.get("id")==null?UUID.randomUUID().toString():map.get("id").toString());
+                detail.setDsId(dsId);
+                detail.setTableId(map.get("tableId")==null?"":map.get("tableId").toString());
+                detail.setTableName(map.get("tableName")==null?"":map.get("tableName").toString());
+                detail.setFieldId(trim(map.get("field_id")==null?"":map.get("field_id").toString()));
+                detail.setFieldName(map.get("field_name")==null?"":map.get("field_name").toString());
+                detail.setFieldEnName(map.get("field_en_name")==null?"":map.get("field_en_name").toString());
+                detail.setFieldChEnName(map.get("field_ch_en_name")==null?"":map.get("field_ch_en_name").toString());
+                detail.setSort(map.get("index")==null?"":map.get("index").toString());
+                detail.setStatus(StatusEnum.NOMAL);
+                detail.setCreateDate(LocalDate.now());
+                sqlList.add(detail);
+            }
+        }
+        if(sqlList.size()<1)
+        {
+            return;
+        }
+        QueryWrapper<SysDataset> wrapperSysDataset=new QueryWrapper<SysDataset>();
+        wrapperSysDataset.eq("id",dsId);
+        sysDatasetService.remove(wrapperSysDataset);
+        QueryWrapper<SysDatasetDetail> wrapperSysDatasetDetial=new QueryWrapper<SysDatasetDetail>();
+        wrapperSysDatasetDetial.eq("ds_id",dsId);
+        sysDatasetDetailService.remove(wrapperSysDatasetDetial);
+        sysDatasetService.save(dataset);
+        for(SysDatasetDetail temp:sqlList)
+        {
+            sysDatasetDetailService.save(temp);
+        }
     }
+
+
 
     //客户查询页面保存
     @ResponseBody
@@ -96,7 +152,7 @@ public class SysDatasetController {
         sysDataset.setBranchId(branchId);
         sysDataset.setCreateDate(now());
         sysDataset.setDsType("5");
-        sysDataset.setStatus("1");
+        sysDataset.setStatus(StatusEnum.NOMAL);
         sysDatasetService.save(sysDataset);
     }
 }

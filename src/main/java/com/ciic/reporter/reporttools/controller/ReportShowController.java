@@ -4,6 +4,7 @@ package com.ciic.reporter.reporttools.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ciic.reporter.common.StatusEnum;
 import com.ciic.reporter.reporttools.entity.ReportShowVoEntity;
 import com.ciic.reporter.reporttools.entity.ReportShow;
 import com.ciic.reporter.reporttools.entity.SysDataset;
@@ -68,7 +69,7 @@ public class ReportShowController {
         String[] knowKeys={"reportId","reportName","reportEnName","reportChEnName","remarks","code","isPublic","isPrinting","isExport","cusId","isModelPrinting"};
         CollectionUtils.addAll(knowLists,knowKeys);
         String columns="";
-        String where ="1=1";
+        String where ="1=1 {{where}}";
         String groupby="";
         String orderby="";
         Boolean needGroupBy=false,hasNomalColumns=false;//只有当同时存在分组函数和普通列才需要group by
@@ -96,7 +97,7 @@ public class ReportShowController {
                     show.setConditionName(maps.get("condition")!=null?maps.get("condition").toString():"");
                     show.setConditionValue(maps.get("conditionValue")!=null?maps.get("conditionValue").toString():"");
                     show.setConditionValue2(maps.get("conditionValue2")!=null?maps.get("conditionValue2").toString():"");
-                    show.setStatues("1");
+                    show.setStatues(StatusEnum.NOMAL);
                     show.setCreateDate(LocalDate.now());
                     shows.add(show);//未考虑主键问题
                     //查询条件组合
@@ -234,7 +235,7 @@ public class ReportShowController {
         newReporterData.setIsExport(params.get("isExport")!=null?params.get("isExport").toString():"");
         newReporterData.setCusId(params.get("cusId")!=null?params.get("cusId").toString():"");
         newReporterData.setBranchId(dataset.getBranchId());
-        newReporterData.setStatus("1");
+        newReporterData.setStatus(StatusEnum.NOMAL);
         newReporterData.setCreateDate(LocalDate.now());
         //开始保存数据
         //需要事务

@@ -1,8 +1,10 @@
 package com.ciic.reporter.dbManage.controller;
 
 
+import com.ciic.reporter.common.StatusEnum;
 import com.ciic.reporter.dbManage.entity.SysDatasource;
 import com.ciic.reporter.dbManage.service.ISysDatasourceService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import static java.time.LocalDate.now;
 
@@ -31,7 +34,22 @@ public class SysDatasourceController {
     @PostMapping("/saveDataSource")
     @ResponseBody
     public void addDataSource(@RequestBody SysDatasource db){
+        if(StringUtils.isEmpty(db.getId()))
+        {
+            db.setId(UUID.randomUUID().toString());
+        }
+        sysDatasourceService.removeById(db.getId());
         db.setCreateDate(now());
+        db.setStatus(StatusEnum.NOMAL);
+        if(StringUtils.isEmpty(db.getDbInitalLinkCounts())) {
+            db.setDbInitalLinkCounts("10");
+        }
+        if(StringUtils.isEmpty(db.getDbMinimumLinkCounts())) {
+            db.setDbMinimumLinkCounts("10");
+        }
+        if(StringUtils.isEmpty(db.getDbMaximumLinkCounts())) {
+            db.setDbMaximumLinkCounts("20");
+        }
         sysDatasourceService.save(db);
     }
 

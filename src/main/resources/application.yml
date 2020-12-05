@@ -7,7 +7,7 @@ spring:
     druid:
      # 数据库 1
       db1:
-        url: jdbc:mysql://192.168.10.233:3306/db1?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://192.168.251.61:3306/ciic_report_set?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
         username: ciic-wage
         password: ciic-wage
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -37,7 +37,7 @@ spring:
         login-password: 123456
       # 数据库 2
       db3:
-        url: jdbc:mysql://192.168.10.233:3306/db3?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://192.168.251.61:3306/fc-wage-cus-v2.0?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
         username: ciic-wage
         password: ciic-wage
         driver-class-name: com.mysql.cj.jdbc.Driver
