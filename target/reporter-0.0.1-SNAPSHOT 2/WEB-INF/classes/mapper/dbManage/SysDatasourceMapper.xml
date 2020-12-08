@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciic.reporter.dbManage.mapper.SysDatasourceMapper">
+    <select id="queryDatasourceList" resultType="com.ciic.reporter.dbManage.entity.SysDatasource" parameterType="java.lang.String">
+        SELECT sds.`id`,sds.`db_name`,sds.`db_code`,sds.`db_link`,sds.`db_username`,sds.`db_password`,
+        sds.`db_driver`,sds.`db_inital_link_counts`,sds.`db_minimum_link_counts`,sds.`db_maximum_link_counts`,
+        sds.`status`,sds.`create_by`,sds.`create_date`,sds.`update_by`,sds.`update_date`,sds.`remarks`
+         FROM sys_datasource sds WHERE sds.`id` IN (SELECT s.`db_source_id` FROM sys_dataset s WHERE s.`id`= #{id} )
+         and status=0
+    </select>
+
+    <select id="queryCodeList" resultType="java.util.LinkedHashMap">
+        SELECT s.db_code dbCode FROM sys_datasource s where status=0
+    </select>
+
+    <select id="queryDataSourceByCode" resultType="java.util.LinkedHashMap">
+        SELECT * FROM sys_datasource s WHERE s.`db_code`= #{db_code} and status=0
+    </select>
+</mapper>

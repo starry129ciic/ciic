@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciic.reporter.dbManage.mapper.SysDatasetDetailMapper">
+    <select id="queryColList" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
+        ${sqlContent}
+    </select>
+    <select id="queryDataTableList" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
+        SELECT s.`table_id`,s.`table_name`,s.`id`,s.`field_id`,s.`field_name`,s.`field_en_name`,s.`field_ch_en_name`,s.`ds_id` FROM sys_dataset_detail s WHERE s.`ds_id`= #{dsId}
+    </select>
+
+    <select id="querydsIdByid" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
+        SELECT s.`ds_id` FROM sys_dataset_detail s WHERE s.`id`= #{id}
+    </select>
+</mapper>

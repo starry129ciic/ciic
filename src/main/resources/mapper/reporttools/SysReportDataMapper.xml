@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciic.reporter.reporttools.mapper.SysReportDataMapper">
+
+    <select id="getByCusId" resultType="com.ciic.reporter.reporttools.entity.SysReportData" parameterType="java.lang.String">
+            SELECT * FROM sys_report_data r WHERE r.cus_id=#{cusId}
+    </select>
+
+<!--    <insert id="insert" parameterType="com.ciic.reporter.reporttools.entity.SysReportData">-->
+<!--        INSERT INTO `db1`.`sys_report_data`(`id`, `report_name`, `template_id`, `code`, `report_select_sql`, `is_public`, `status`, `create_by`, `create_date`, `update_by`, `update_date`, `cus_id`, `cus_name`, `branch_id`, `remarks`, `is_update`, `is_printing`, `is_export`, `is_page`, `page_lines`, `custom_header_id`, `custom_footer_id`, `custom_header`, `custom_footer`)-->
+<!--         VALUES (#{id},#{reportName},#{templateId},#{code},#{reportSelectSql},#{isPublic},-->
+<!--         #{status},#{createBy},#{createDate},#{updateBy},#{updateDate},#{cusId},#{cusName},-->
+<!--         #{branchId},#{remarks},#{isUpdate},#{isPrinting},#{isExport},#{isPage},#{pageLines},-->
+<!--         #{customHeaderId},#{customFooterId},#{customHeader},#{customFooter});-->
+
+<!--    </insert>-->
+
+    <select id="selectId" resultType="java.lang.String">
+            SELECT  id from sys_report_data ORDER BY id DESC LIMIT 0,1
+    </select>
+
+    <insert id="insertFrom" parameterType="com.ciic.reporter.reporttools.entity.SysReportData">
+        INSERT INTO `db1`.`sys_report_data`(`id`, `report_name`, `report_en_name`, `report_ch_en_name`, `template_id`, `code`, `report_select_sql`, `is_public`, `status`, `create_by`, `create_date`, `update_by`, `update_date`, `cus_id`, `cus_name`, `branch_id`, `remarks`, `is_update`, `is_printing`, `is_export`, `is_page`, `page_lines`, `custom_header_id`, `custom_footer_id`, `custom_header`, `custom_footer`)
+         VALUES (#{id},#{reportName},#{reportEnName},#{reportChEnName},#{templateId},#{code},#{reportSelectSql},#{isPublic},
+         #{status},#{createBy},#{createDate},#{updateBy},#{updateDate},#{cusId},#{cusName},
+         #{branchId},#{remarks},#{isUpdate},#{isPrinting},#{isExport},#{isPage},#{pageLines},
+         #{customHeaderId},#{customFooterId},#{customHeader},#{customFooter});
+
+    </insert>
+
+
+
+
+
+</mapper>
