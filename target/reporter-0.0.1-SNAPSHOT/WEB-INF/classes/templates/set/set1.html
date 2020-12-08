@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    <table>
+        <tr>
+            <td>自定义查询编号</td><td>
+            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入查询编号" class="layui-input" id="code">
+        </td><td></td><td></td>
+        </tr>
+        <tr>
+            <td>自定义查询名称</td><td>
+            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入查询编号" class="layui-input" id="cnname">
+        </td>
+            <td>自定义查询英文名称</td><td>
+            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入查询编号" class="layui-input" id="enname">
+        </td>
+        </tr>
+        <tr>
+            <td>从哪个数据库中读取数据</td><td>
+            <select name="modules" lay-verify="required" lay-search="" id="datasource_id">
+                <option value="">直接选择或搜索选择</option>
+                <option value="first">first</option>
+                <option value="second">second</option>
+                <option value="3">layim</option>
+                <option value="4">element</option>
+                <option value="5">laytpl</option>
+            </select>
+        </td><td></td><td></td>
+        </tr>
+        <tr>
+            <td>输出数据之前需要执行的语句</td><td>
+            <textarea placeholder="请输入中英文表头HTML" class="layui-textarea" id="be_sql"></textarea>
+        </td><td></td><td></td>
+        </tr>
+        <tr>
+            <td>输出数据需要执行的语句</td><td>
+            <textarea placeholder="请输入中英文表头HTML" class="layui-textarea" id="main_sql"></textarea>
+        </td><td></td><td></td>
+        </tr>
+        <tr>
+            <td>输出数据之后需要执行的语句</td><td>
+            <textarea placeholder="请输入中英文表头HTML" class="layui-textarea" id="end_sql"></textarea>
+        </td><td></td><td></td>
+        </tr>
+        <tr>
+            <td>是否分页</td><td>
+            <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" id="ispage">
+        </td><td>是否打印</td><td>
+            <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" id="isprint">
+        </td>
+        </tr>
+        <tr>
+            <td>是否导出</td><td>
+            <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" id="isexport">
+        </td><td></td><td></td>
+        </tr>
+        <tr>
+            <td>表头HTML</td><td>
+            <textarea placeholder="请输入表头HTML" class="layui-textarea" id="headdiv"></textarea>
+        </td><td>表尾HTML</td><td>
+            <textarea placeholder="请输入表尾HTML" class="layui-textarea" id="footdiv"></textarea>
+        </td>
+        </tr>
+        <tr>
+            <td>英文表头HTML</td><td>
+            <textarea placeholder="请输入英文表头HTML" class="layui-textarea" id="enheaddiv"></textarea>
+        </td><td>英文表尾HTML</td><td>
+            <textarea placeholder="请输入英文表尾HTML" class="layui-textarea" id="enfootdiv"></textarea>
+        </td>
+        </tr>
+        <tr>
+            <td>中英文表头HTML</td><td>
+            <textarea placeholder="请输入中英文表头HTML" class="layui-textarea" id="cnenheaddiv"></textarea>
+        </td><td>中英文表尾HTML</td><td>
+            <textarea placeholder="请输入中英文表尾HTML" class="layui-textarea" id="cnenfootdiv"></textarea>
+        </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
