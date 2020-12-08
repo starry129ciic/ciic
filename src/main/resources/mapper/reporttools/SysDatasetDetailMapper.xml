@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciic.reporter.reporttools.mapper.SysReportDatasetDetailMapper">
+
+    <select id="selectColName" parameterType="java.lang.String">
+        select field_name from sys_dataset_detail where field_id = #{fieldId}
+    </select>
+
+</mapper>

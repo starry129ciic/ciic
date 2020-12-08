@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciic.reporter.reporttools.mapper.ReportShowMapper">
+
+    <select id="getByColId" resultType="com.ciic.reporter.reporttools.entity.ReportShow" parameterType="java.lang.String">
+            SELECT * FROM report_show r WHERE r.col_id=#{colId}
+    </select>
+
+    <select id="selectId" resultType="java.lang.String">
+            SELECT  id from report_show ORDER BY id DESC LIMIT 0,1
+    </select>
+
+    <select id="selectReportId" resultType="java.lang.String">
+            SELECT  report_id from report_show ORDER BY report_id DESC LIMIT 0,1
+    </select>
+
+<!--    <insert id="insert" parameterType="com.ciic.reporter.reporttools.vo.ReportShowVo">-->
+<!--        INSERT INTO `ciic_report_set`.`report_show`(`report_id`, `id`,-->
+<!--        `dataset_id`, `col_id`, `col_name`, `col_en_name`, `col_ch_en_name`,-->
+<!--        `p_col_name`, `detail_order`, `col_type`, `dict_table_name`, `edit`,-->
+<!--        `templet`, `layVerify`, `statues`, `create_by`, `create_date`, `update_by`,-->
+<!--         `update_date`, `remarks`, `condition_name`, `condition_value`, `condition_value2`)-->
+<!--         VALUES (#{reportId}, #{id}, #{datasetId}, #{colId},-->
+<!--          #{colName}, #{colEnName}, #{colChEnName}, #{pColName}, #{detailOrder},-->
+<!--           #{colType}, #{dictTableName}, #{edit}, #{templet}, #{layVerify}, #{statues},-->
+<!--           #{createBy}, #{createDate}, #{updateBy}, #{updateDate}, #{remarks}, #{conditionName}, #{conditionValue}, #{conditionValue2});-->
+<!--    </insert>-->
+
+    <insert id="insert" parameterType="com.ciic.reporter.reporttools.vo.ReportShowVo">
+        INSERT INTO report_show(`report_id`, `id`,
+        `dataset_id`, `col_id`, `col_name`, `col_en_name`, `col_ch_en_name`,
+        `p_col_name`, `detail_order`, `col_type`, `dict_table_name`, `edit`,
+        `templet`, `layVerify`, `statues`, `create_by`, `create_date`, `update_by`,
+         `update_date`, `remarks`, `condition_name`, `condition_value`, `condition_value2`)
+         VALUES (#{reportId}, #{id}, #{datasetId}, #{colId},
+          #{colName}, #{colEnName}, #{colChEnName}, #{pColName}, #{detailOrder},
+           #{colType}, #{dictTableName}, #{edit}, #{templet}, #{layVerify}, #{statues},
+           #{createBy}, #{createDate}, #{updateBy}, #{updateDate}, #{remarks}, #{conditionName}, #{conditionValue}, #{conditionValue2});
+    </insert>
+
+
+
+    <!--    <update id="updateByColId"  parameterType="java.lang.String">-->
+<!--        UPDATE report_show r SET-->
+<!--        <if test="colName != null and colName != ''">-->
+<!--            r.col_name=#{colName},-->
+<!--        </if>-->
+<!--        <if test="colEnName != null and colEnName != ''">-->
+<!--            r.col_en_name=#{colEnName},-->
+<!--        </if>-->
+<!--        <if test="colChEnName != null and colChEnName != ''">-->
+<!--            r.col_ch_en_name=#{colChEnName},-->
+<!--        </if>-->
+<!--        WHERE r.col_id=#{colId}-->
+<!--    </update>-->
+
+
+
+
+</mapper>

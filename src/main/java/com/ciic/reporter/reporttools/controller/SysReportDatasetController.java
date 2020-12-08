@@ -192,7 +192,7 @@ public class SysReportDatasetController {
         }
         sql=sql+columns +" from ("+dataset.getDsId()+") t1 where "+where+" "+groupby+" "+orderby +" limit 0,1";
 
-        List<Map<String, Object>> dataList = dataService.getData(dataset.getDbSourceId(), sql);
+         List<Map<String, Object>> dataList = dataService.getData(dataset.getDbSourceId(), sql);
         if(dataList==null|| dataList.size()<1)
         {
             return "<span>查询数据失败</span>";

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+    <script th:src="@{/layui/layui.js}"></script>
+    <script>
+        function GetQueryValue1(queryName) {
+            var reg = new RegExp("(^|&)" + queryName + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if ( r != null ){
+                return decodeURI(r[2]);
+            }else{
+                return null;
+            }
+        }
+
+        var dynamicCondition,
+            mycols=new Array(),
+            conditions=new Array(),
+            dataFields=new Array();
+        layui.config({
+            base:  '/layui_exts/' //设定扩展的Layui模块的所在目录，一般用于外部模块扩展
+        }).extend({
+            dynamicCondition: 'dynamicCondition/dynamicCondition'//扩展组建的详细路径
+        }).use(['jquery','table','form','dynamicCondition'], function(){
+            var $ = layui.jquery,
+                table = layui.table,
+                form = layui.table,
+                dynamicCondition = layui.dynamicCondition;
+            var datasid = GetQueryValue1('datasid');
+            var lang = GetQueryValue1('lang');
+
+            $.ajax({
+                url:  "/showtabletitledata?datasid="+datasid+"&lang="+lang,
+                method:"post",
+                dataType : 'json',
+                success : function(data) {
+                    for (var i = 0;i < data.length; i++) {
+
+                        var obj = '0';
+                        if ('cn' == lang) {
+                            obj = data[i].col_name;
+                        } else if ('en' == lang) {
+                            obj = data[i].col_en_name;
+                        } else if ('cnen' == lang) {
+                            obj = data[i].col_ch_en_name;
+                        }
+                        var wid = data[i].per_visible;
+                        if (wid == undefined) {
+                            wid = 10;
+                        }
+                        if (obj != '0') {
+                            if(data[i].col_type=='2'||data[i].col_type=='3')
+                            {
+                                mycols[mycols.length] = {field: data[i].col_id, title: obj, align: 'center', width: wid + '%'};
+                            }
+                            else if(data[i].col_type=='1') {
+                                dataFields[i] = {field: data[i].col_id, title: obj, edit: 'text'};
+                            }
+                        }
+                    }
+                    var dc = dynamicCondition.create({
+                        //通过容器选择器传入，也可以$("#dynamicCondition"),或者document.getElementById("dynamicCondition")
+                        fields : dataFields,
+                        elem:"#dynamicCondition"
+                        ,type:"complex"  //type:"simple"/"complex"
+                        ,requestDataType: 'json'
+                        ,instanceName:  "complexInstance"
+                        ,displayModel:"popup"
+                        ,popupBtnsWidth: 350
+                        ,popupShowQueryBtn: true
+                        ,unpopupBtnswidth: 410
+                        ,unpopupShowAddBtn: true
+                        ,tableId:"listTable"
+                        ,conditionTextId:"#msg"
+                    });
+
+                    /**简单查询*/
+                    $("#simpleBtn").on("click",function(){
+                        dcInstance.open();
+                    })
+                    var tableDivHeight = 'full-'+ ($("#noTableDiv").height()+ 10);
+
+                    table.render({
+                        elem: '#listTable'
+                        ,url: "/showtabledata?datasid="+datasid+"&lang="+lang
+                        ,title: '数据表'
+                        ,method:"post"
+                        ,sortType:'server'
+                        ,height: tableDivHeight
+                        ,cellMinWidth: 80
+                        ,height:'full-200'
+                        ,toolbar: true
+                        ,totalRow: true
+                        ,cols:                             [
+                                mycols
+                            ]
+                        ,id: 'listTable'
+                        ,page: true
+                    });
+
+                },
+                error : function() {
+                    layer.msg('系统异常，请联系管理员!',{icon:2,time:2000});
+                }
+            });
+
+        });
+        /***
+         * 查询
+         */
+        function dynamicConditionQuery(){
+            dynamicCondition.getInstance().open();
+        }
+    </script>
+</head>
+<body class="layui-layout-body">
+<div id="contentdiv" >
+<!--    <div id="headdiv"  th:utext="${headdiv}" class="layui-row">-->
+<!--    </div>-->
+    <div style="padding-top: 5px;">
+        <div id="msg" style="margin-top:10px;margin-left:10px;" class="layui-row">查询条件：</div>
+        <ul id="dynamicCondition" style="display:none;" >
+            </ul>
+        <script type="text/html" id="toolbarBts">
+            <div class="layui-row">
+                <a class="layui-btn layui-btn-sm" onclick="dynamicConditionQuery()" >查询&nbsp;</a>
+            </div>
+        </script>
+    </div>
+    <div id="tablediv" class="layui-row" >
+        <table class="layui-hide" id="listTable" lay-filter="listMainTable"></table>
+    </div>
+<!--    <div id="footdiv" th:utext="${footdiv}" class="layui-row"></div>-->
+</div>
+</body>
+</html>
