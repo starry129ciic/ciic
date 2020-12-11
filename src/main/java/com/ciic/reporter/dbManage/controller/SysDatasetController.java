@@ -53,14 +53,15 @@ public class SysDatasetController {
         return list;
     }
 
-    @PostMapping("/queryDataByTreeKey")
+    @GetMapping("/queryDataByTreeKey")
     @ResponseBody
-    public List queryDataByTreeKey(@RequestBody String dataSetId){
-        String id = "";
-        if (dataSetId != null && !"".equals(dataSetId)) {
-            id = dataSetId.substring(dataSetId.indexOf(":") + 2 , dataSetId.length() - 2);
-        }
-        List list = sysDatasetService.queryDataByTreeKey(id);
+    public List queryDataByTreeKey(@RequestParam("dataSetId") String dataSetId){
+//        String id = "";
+//        if (dataSetId != null && !"".equals(dataSetId)) {
+//            id = dataSetId.substring(dataSetId.indexOf(":") + 2 , dataSetId.length() - 2);
+//        }
+
+        List list = sysDatasetService.queryDataByTreeKey(dataSetId);
         return list;
     }
 

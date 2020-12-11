@@ -2,8 +2,12 @@ package com.ciic.reporter.dbManage.entity;
 
 import java.time.LocalDate;
 import java.io.Serializable;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -43,6 +47,9 @@ public class SysDatasource implements Serializable {
 
     private String createBy;
 
+
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private LocalDate createDate;
 
     private String updateBy;

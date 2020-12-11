@@ -1,6 +1,7 @@
 package com.ciic.reporter.dbManage.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.ciic.reporter.common.StatusEnum;
 import com.ciic.reporter.dbManage.entity.SysDatasource;
 import com.ciic.reporter.dbManage.service.ISysDatasourceService;
@@ -11,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static java.time.LocalDate.now;
 
@@ -31,6 +31,24 @@ public class SysDatasourceController {
     @Autowired
     private ISysDatasourceService sysDatasourceService;
 
+
+//    @PostMapping("/saveDataSource")
+//    @ResponseBody
+//    public void addDataSource(@RequestBody Object datasource) {
+////        HashMap<String,Object> params=(LinkedHashMap<String,Object>)datasource;
+////        SysDatasource sysDatasource = new SysDatasource();
+////        System.out.println(datasource);
+////
+////        Set keys=params.keySet();
+////        for(Object keyTemp:keys){
+////            Map maps = (Map)JSON.parse(params.get(keyTemp.toString()).toString());
+////            sysDatasource.setId(params.get());
+////            System.out.println(maps);
+////        }
+//
+//    }
+
+
     @PostMapping("/saveDataSource")
     @ResponseBody
     public void addDataSource(@RequestBody SysDatasource db){
@@ -39,7 +57,13 @@ public class SysDatasourceController {
             db.setId(UUID.randomUUID().toString());
         }
         sysDatasourceService.removeById(db.getId());
+        //判断创建日期是否为空如果为空就是第一次创建就创建时间
+        if(db.getCreateDate()==null){
         db.setCreateDate(now());
+        }
+        //只要进行操作就对修改时间进行更新
+        db.setUpdateDate(now());
+
         db.setStatus(StatusEnum.NOMAL);
         if(StringUtils.isEmpty(db.getDbInitalLinkCounts())) {
             db.setDbInitalLinkCounts("10");
