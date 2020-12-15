@@ -20,7 +20,7 @@
         t2.field_id ,
         t2.sort
         FROM `sys_dataset` t1 join sys_dataset_detail t2 on t1.id=t2.ds_id
-        join sys_datasource t3 on t1.db_source_id=t3.db_code where t1.id=#{id}
+        join sys_datasource t3 on t1.db_source_id=t3.id where t1.id=#{id}
     </select>
 
 <!--    <select id="queryDataByTreeKey" resultType="java.util.LinkedHashMap">-->

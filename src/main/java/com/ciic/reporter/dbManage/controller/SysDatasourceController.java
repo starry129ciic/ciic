@@ -56,13 +56,20 @@ public class SysDatasourceController {
         {
             db.setId(UUID.randomUUID().toString());
         }
+        if(db.getCreateDate() != null){
+            System.out.println("不等于空");
+            //只要进行操作就对修改时间进行更新
+            db.setUpdateDate(now());
+            System.out.println("getCreateDate不为空");
+        }
         sysDatasourceService.removeById(db.getId());
         //判断创建日期是否为空如果为空就是第一次创建就创建时间
         if(db.getCreateDate()==null){
-        db.setCreateDate(now());
+            System.out.println("getCreateDate为空");
+            db.setCreateDate(now());
+            //只要进行操作就对修改时间进行更新
         }
-        //只要进行操作就对修改时间进行更新
-        db.setUpdateDate(now());
+
 
         db.setStatus(StatusEnum.NOMAL);
         if(StringUtils.isEmpty(db.getDbInitalLinkCounts())) {

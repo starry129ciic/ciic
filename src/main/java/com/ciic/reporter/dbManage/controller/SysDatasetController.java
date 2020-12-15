@@ -79,7 +79,7 @@ public class SysDatasetController {
         SysDataset dataset=new SysDataset();
         dataset.setId(dsId);
         dataset.setDsId(input.get("sql")==null?"":input.get("sql").toString());
-        dataset.setDbSourceId(input.get("querydbCode")==null?"":input.get("querydbCode").toString());
+        dataset.setDbSourceId(input.get("queryId")==null?"":input.get("queryId").toString());
         dataset.setDsName(input.get("dsName")==null?"":input.get("dsName").toString());
         dataset.setDsType(input.get("dsType")==null?"":input.get("dsType").toString());
         dataset.setSort(input.get("sort")==null?"0":input.get("sort").toString());

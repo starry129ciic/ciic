@@ -17,7 +17,7 @@
     <select id="queryTree1List" resultType="java.util.LinkedHashMap">
         select t1.id  ,db_source_id , t1.ds_id ,t2.id as detial_id,t2.field_id ,t1.ds_name ,t2.field_name ,t2.field_en_name,t2.field_ch_en_name
         FROM `sys_dataset` t1 join sys_dataset_detail t2 on t1.id=t2.ds_id
-        join sys_datasource t3 on t1.db_source_id=t3.db_code
+        join sys_datasource t3 on t1.db_source_id=t3.id
         where t1.id=#{cid} order by t1.ds_id,t2.sort asc
     </select>
 
