@@ -203,7 +203,7 @@ public class SysDatasetDetailController {
                         String id = UUID.randomUUID().toString().replace("-", "");
                         Map map = new HashMap();
                         map.put("id", id);
-                        map.put("field_id", key.toString().toUpperCase());
+                        map.put("field_id", key.toString().toUpperCase().trim());
                         map.put("ds_id", dsId);
                         queryColList.add(map);
                     }
@@ -214,14 +214,14 @@ public class SysDatasetDetailController {
                     Map fieldMap = new HashMap();
                     if (StringUtils.isNotEmpty(col) && col.indexOf("as") == -1) {
                         String id = UUID.randomUUID().toString().replace("-", "");
-                        fieldMap.put("field_id", col.toUpperCase());
+                        fieldMap.put("field_id", col.toUpperCase().trim());
                         fieldMap.put("id", id);
                         fieldMap.put("ds_id",dsId);
                         colList.add(fieldMap);
                     } else {
                         col = col.substring(col.indexOf("as") + 2, col.length()).trim();
                         String id = UUID.randomUUID().toString().replace("-", "");
-                        fieldMap.put("field_id", col.toUpperCase());
+                        fieldMap.put("field_id", col.toUpperCase().trim());
                         fieldMap.put("id", id);
                         fieldMap.put("ds_id", dsId);
                         colList.add(fieldMap);
