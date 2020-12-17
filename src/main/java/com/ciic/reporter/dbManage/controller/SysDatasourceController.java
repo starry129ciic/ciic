@@ -84,11 +84,10 @@ public class SysDatasourceController {
         sysDatasourceService.save(db);
     }
 
-    @PostMapping("/queryDataSource")
-    @ResponseBody
-    public List queryDataSource(@RequestBody String id){
-        String datasetId = id.substring(id.indexOf(":") + 2, id.length()-2);
-        List dbList = sysDatasourceService.queryDatasourceList(datasetId);
+    @GetMapping("/queryDataSource")
+    public List queryDataSource(@RequestParam("db_code") String db_code){
+//        String datasetId = id.substring(id.indexOf(":") + 2, id.length()-2);
+        List dbList = sysDatasourceService.queryDatasourceList(db_code);
         return dbList;
     }
 

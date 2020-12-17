@@ -24,7 +24,7 @@ public class SysDatasourceServiceImpl extends ServiceImpl<SysDatasourceMapper, S
 
     @Override
     public List queryDatasourceList(String dataSetId) {
-        List dbList = sysDatasourceMapper.queryDatasourceList(dataSetId);
+        List dbList = sysDatasourceMapper.queryDataSourceByCode(dataSetId);
         return dbList;
     }
 
