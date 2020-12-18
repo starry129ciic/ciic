@@ -11,9 +11,9 @@
     </select>
 
     <select id="queryDataByTreeKey" resultType="java.util.LinkedHashMap">
-            SELECT
-	t1.id,
-	t1.ds_id as dsId,
+          SELECT
+	t1.id  as dsId,
+	t1.ds_id as dataSetId,
 	t1.ds_name as dsName,
 	t1.ds_type,
 	t1.db_source_id,
@@ -33,7 +33,7 @@ FROM
 	JOIN sys_dataset_detail t2 ON t1.id = t2.ds_id
 	JOIN sys_datasource t3 ON t1.db_source_id = t3.db_code
 WHERE
-	t1.id = #{id}
+	t1.id  = #{id}
     </select>
 
 <!--    <select id="queryDataByTreeKey" resultType="java.util.LinkedHashMap">-->

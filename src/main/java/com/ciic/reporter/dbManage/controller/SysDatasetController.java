@@ -75,7 +75,8 @@ public class SysDatasetController {
             return;
         }
         //从前台获取报表的Id
-        String dsId=input.get("dsId")==null?UUID.randomUUID().toString():input.get("dsId").toString();
+        String dsId=input.get("dsId")==""?UUID.randomUUID().toString():input.get("dsId").toString();
+        System.out.println(dsId);
         SysDataset dataset=new SysDataset();
         dataset.setId(dsId);
         dataset.setDsId(input.get("sql")==null?"":input.get("sql").toString());

@@ -225,6 +225,7 @@ public class ReportShowController {
         newReporterData.setDataSourceId(dataset.getDbSourceId());
         newReporterData.setDataSetId(params.get("dataSetId").toString());
         newReporterData.setReportName(params.get("reportName").toString());
+        newReporterData.setRemarks(params.get("remarks").toString());
         newReporterData.setReportEnName(params.get("reportEnName").toString());
         newReporterData.setReportChEnName(params.get("reportChEnName").toString());
         newReporterData.setReportSelectSql(sql);
