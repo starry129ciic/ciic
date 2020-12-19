@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Repository
@@ -119,7 +120,72 @@ public class DataDaoImpl implements IDataDao {
             while (rs.next()) {
                 Map<String, Object> rowData = new HashMap<String, Object>();
                 for (int i = 1; i <= columnCount; i++) {
-                    rowData.put(md.getColumnName(i), rs.getObject(i));
+                    Object o=rs.getObject(i);
+                    if(o!=null) {
+                        switch (o.getClass().getName()) {
+                            case "java.sql.Date":
+                                if (o != null && ((java.sql.Date) o) != null) {
+                                    try {
+                                        java.sql.Date date = (java.sql.Date) o;
+                                        SimpleDateFormat DateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                        rowData.put(md.getColumnName(i), date.toString());
+                                    } catch (Exception e) {
+                                        rowData.put(md.getColumnName(i), rs.getObject(i));
+                                    }
+                                } else {
+                                    rowData.put(md.getColumnName(i), rs.getObject(i));
+                                }
+                                break;
+                            case "java.sql.Timestamp":
+                                if (o != null && ((java.sql.Timestamp) o) != null) {
+                                    try {
+                                        java.sql.Timestamp date = (java.sql.Timestamp) o;
+                                        SimpleDateFormat DateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                        rowData.put(md.getColumnName(i), date.toString());
+                                    } catch (Exception e) {
+                                        rowData.put(md.getColumnName(i), rs.getObject(i));
+                                    }
+                                } else {
+                                    rowData.put(md.getColumnName(i), rs.getObject(i));
+                                }
+                                break;
+                            case "java.sql.Time":
+                                if (o != null && ((java.sql.Time) o) != null) {
+                                    try {
+                                        java.sql.Time date = (java.sql.Time) o;
+                                        SimpleDateFormat DateFormat = new SimpleDateFormat("HH:mm:ss");
+                                        rowData.put(md.getColumnName(i), date.toString());
+                                    } catch (Exception e) {
+                                        rowData.put(md.getColumnName(i), rs.getObject(i));
+                                    }
+                                } else {
+                                    rowData.put(md.getColumnName(i), rs.getObject(i));
+                                }
+                                break;
+//                        case "java.lang.Integer":
+//                            if(o!=null&&((java.lang.Integer)o)!=null)
+//                            {
+//                                try {
+//                                    java.sql.Time date = (java.sql.Time) o;
+//                                    SimpleDateFormat DateFormat = new SimpleDateFormat("HH:mm:ss");
+//                                    rowData.put(md.getColumnName(i), date.toString());
+//                                }catch (Exception e)
+//                                {
+//                                    rowData.put(md.getColumnName(i), rs.getObject(i));
+//                                }
+//                            }else
+//                            {
+//                                rowData.put(md.getColumnName(i), rs.getObject(i));
+//                            }
+//                            break;
+                            default:
+                                rowData.put(md.getColumnName(i), rs.getObject(i));
+                                break;
+                        }
+                    }else
+                    {
+                        rowData.put(md.getColumnName(i), rs.getObject(i));
+                    }
                 }
                 list.add(rowData);
             }

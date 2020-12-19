@@ -18,6 +18,7 @@
 
         var dynamicCondition,
             mycols=new Array(),
+            colname=new Array(),
             conditions=new Array(),
             dataFields=new Array();
         layui.config({
@@ -55,6 +56,7 @@
                             if(data[i].col_type=='2'||data[i].col_type=='3')
                             {
                                 mycols[mycols.length] = {field: data[i].col_id, title: obj, align: 'center', width: wid + '%'};
+                                colname[colname.length]=obj;
                             }
                             else if(data[i].col_type=='1') {
                                 dataFields[i] = {field: data[i].col_id, title: obj, edit: 'text'};
@@ -83,7 +85,7 @@
                     })
                     var tableDivHeight = 'full-'+ ($("#noTableDiv").height()+ 10);
 
-                    table.render({
+                    var ins1 = table.render({
                         elem: '#listTable'
                         ,url: "/showtabledata?datasid="+datasid+"&lang="+lang
                         ,title: '数据表'
@@ -101,6 +103,33 @@
                         ,page: true
                     });
 
+
+                    //将上述表格示例导出为 xls 文件
+                    //监听事件
+                    table.on('toolbar(listMainTable)', function(obj) {
+                        console.log(obj);
+                        switch(obj.event){
+                            case 'LAYTABLE_EXPORT':
+                                $.ajax({
+                                    url: "/showtabledata?datasid="+datasid+"&lang="+lang,
+                                    type: 'post',
+                                    data: {
+                                        type: "export",
+                                        jsonStr: obj.config.where.jsonStr
+                                    },
+                                    async: false,
+                                    dataType: 'json',
+                                    success: function (res) {
+                                        //使用table.exportFile()导出数据
+                                        table.exportFile([
+                                            colname
+                                        ], res.data, 'xls');
+                                    }
+                                });
+
+                                break;
+                        };
+                    });
                 },
                 error : function() {
                     layer.msg('系统异常，请联系管理员!',{icon:2,time:2000});

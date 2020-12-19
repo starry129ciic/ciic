@@ -55,21 +55,25 @@ public class ShowDataController {
 
         //验证分页
         String pageStr = request.getParameter("page");
+        if(StringUtils.isEmpty(pageStr))
+        {
+            pageStr="1";
+        }
         Matcher m = p.matcher(pageStr);
         int page = 1;
-        if (!StringUtils.isEmpty(pageStr)) {
-            if (!m.find()) {
-                page = Integer.parseInt(pageStr);
-            }
+        if (!m.find()) {
+            page = Integer.parseInt(pageStr);
         }
         String limitStr = request.getParameter("limit");
-        m = p.matcher(limitStr);
+        if(StringUtils.isEmpty(limitStr))
+        {
+            limitStr="10";
+        }
+        m = p.matcher((limitStr.isEmpty()?"":limitStr));
         int limit = 10;
-        if (!StringUtils.isEmpty(limitStr)) {
             if (!m.find()) {
                 limit = Integer.parseInt(limitStr);
             }
-        }
 
         //找到需要执行的所有语句并执行。
         String mainRP = "select * from sys_report_data sp, report_show p  where sp.id=p.report_id and code='" + datasid + "'";
@@ -126,7 +130,16 @@ public class ShowDataController {
 
         String endSql = mainSql + " limit " + ((page - 1) * limit) + "," + (page * limit);
 
-        List<Map<String, Object>> dataList = dataService.getData(datasource_id, endSql);
+        List<Map<String, Object>> dataList = null;
+        //如果是导出查询所有数据
+        String type = request.getParameter("type");
+        if("export".equals(type))
+        {
+            dataList = dataService.getData(datasource_id, mainSql);
+        }else
+        {
+            dataList = dataService.getData(datasource_id, endSql);
+        }
         Map resultEntity = new HashMap<String, Object>();
         resultEntity.put("code", 0);
         resultEntity.put("msg", "");
