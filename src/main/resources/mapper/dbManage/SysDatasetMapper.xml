@@ -3,11 +3,11 @@
 <mapper namespace="com.ciic.reporter.dbManage.mapper.SysDatasetMapper">
     <select id="queryDataSetList"  resultType="java.util.LinkedHashMap">
         SELECT s.`ds_name`,sds.`db_code`,s.`ds_type`,sd.`table_id`,sd.`field_id`,sd.`sort` FROM sys_dataset s LEFT JOIN
-        sys_datasource sds ON s.`db_source_id`=sds.`id` LEFT JOIN sys_dataset_detail sd ON s.`ds_id`=sd.`id`
+        sys_datasource sds ON s.`db_source_id`=sds.`id` LEFT JOIN sys_dataset_detail sd ON s.`ds_id`=sd.`id` WHERE s.status='0'
     </select>
 
     <select id="queryTreeList" resultType="java.util.LinkedHashMap">
-        SELECT s.`ds_name` as label,s.id , s.ds_id FROM sys_dataset s
+        SELECT s.`ds_name` as label,s.id , s.ds_id FROM sys_dataset s  WHERE status = 0
     </select>
 
     <select id="queryDataByTreeKey" resultType="java.util.LinkedHashMap">
@@ -27,7 +27,8 @@
 	t2.field_ch_en_name,
 	t2.sort,
 	t3.db_code,
-	t3.db_name
+	t3.db_name,
+	t1.create_date
 FROM
 	sys_dataset t1
 	JOIN sys_dataset_detail t2 ON t1.id = t2.ds_id

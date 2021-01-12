@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.time.LocalDate.now;
@@ -85,7 +86,14 @@ public class SysDatasetController {
         dataset.setDsType(input.get("dsType")==null?"":input.get("dsType").toString());
         dataset.setSort(input.get("sort")==null?"0":input.get("sort").toString());
         dataset.setStatus(StatusEnum.NOMAL);
-        dataset.setCreateDate(LocalDate.now());
+        if(input.get("createDate") == "" ){
+            dataset.setCreateDate(LocalDate.now());
+        }else {
+            String data = (String) input.get("createDate");
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            dataset.setCreateDate(LocalDate.parse(data,fmt));
+        }
+        dataset.setUpdateDate(LocalDate.now());
         dataset.setRemarks(input.get("remark")==null?"":input.get("remark").toString());
         dataset.setCusId(input.get("cusId")==null?"":input.get("cusId").toString());
         dataset.setCusName(input.get("cusName")==null?"":input.get("cusName").toString());
@@ -108,7 +116,13 @@ public class SysDatasetController {
                 detail.setFieldName(map.get("field_name")==null?"":map.get("field_name").toString());
                 detail.setFieldEnName(map.get("field_en_name")==null?"":map.get("field_en_name").toString());
                 detail.setFieldChEnName(map.get("field_ch_en_name")==null?"":map.get("field_ch_en_name").toString());
-                detail.setSort(map.get("index")==null?"":map.get("index").toString());
+                if(map.get("index") == null){
+                    detail.setSort(map.get("sort")==null?"0":map.get("sort").toString());
+                }
+                if(map.get("sort") == null){
+                    detail.setSort(map.get("index")==null?"0":map.get("index").toString());
+                }
+
                 detail.setStatus(StatusEnum.NOMAL);
                 detail.setCreateDate(LocalDate.now());
                 sqlList.add(detail);
@@ -120,6 +134,7 @@ public class SysDatasetController {
         }
         QueryWrapper<SysDataset> wrapperSysDataset=new QueryWrapper<SysDataset>();
         wrapperSysDataset.eq("id",dsId);
+        wrapperSysDataset.eq("status",'0');
         sysDatasetService.remove(wrapperSysDataset);
         QueryWrapper<SysDatasetDetail> wrapperSysDatasetDetial=new QueryWrapper<SysDatasetDetail>();
         wrapperSysDatasetDetial.eq("ds_id",dsId);

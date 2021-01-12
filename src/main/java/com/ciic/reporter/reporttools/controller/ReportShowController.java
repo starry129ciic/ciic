@@ -270,9 +270,11 @@ public class ReportShowController {
     public Map queryId(@PathVariable("reportId") String reportId){
         QueryWrapper<SysReportData> wrapperReportData = new QueryWrapper<>();
         wrapperReportData.eq("id",reportId);
+        wrapperReportData.eq("status",'0');
         Map<String, Object> mapReportData=sysReportDataService.getMap(wrapperReportData);
         QueryWrapper<ReportShow> wrapperReportShow = new QueryWrapper<>();
         wrapperReportShow.eq("report_id",reportId);
+        wrapperReportShow.eq("statues",'0');
         wrapperReportShow.orderByAsc("col_type");
         wrapperReportShow.orderByAsc("detail_order");
         List<ReportShow> mapReportShow=reportShowService.list(wrapperReportShow);
