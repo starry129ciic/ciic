@@ -34,6 +34,7 @@ public class SysReportDataServiceImpl extends ServiceImpl<SysReportDataMapper, S
         reportDataQueryWrapper.and(Wrapper -> Wrapper.like("cus_id", cusId).or().eq("is_public",1)).like("report_name",reportName);
 
 //        reportDataQueryWrapper.like("report_name",reportName).or().eq("report_name",reportName);
+        reportDataQueryWrapper.eq("status","0");
         IPage<SysReportData> selectPage = sysReportDataMapper.selectPage(page, reportDataQueryWrapper);//分页条件查询
         return selectPage;
     }
