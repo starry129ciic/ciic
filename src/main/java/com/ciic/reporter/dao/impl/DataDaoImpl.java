@@ -118,7 +118,7 @@ public class DataDaoImpl implements IDataDao {
             ResultSetMetaData md = rs.getMetaData();
             int columnCount = md.getColumnCount();
             while (rs.next()) {
-                Map<String, Object> rowData = new HashMap<String, Object>();
+                Map<String, Object> rowData = new LinkedHashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
                     Object o=rs.getObject(i);
                     if(o!=null) {
