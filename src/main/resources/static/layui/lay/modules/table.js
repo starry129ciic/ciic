@@ -23,14 +23,14 @@
         layui.each(t, function (t, l) {
             var n = [];
             "object" == typeof e ? (layui.each(e, function (e, a) {
-                0 == t && i.push(a || "")
+                0 == t && i.push((a || ""))
             }), layui.each(d.clearCacheKey(l), function (e, t) {
-                n.push(t)
+                n.push('"'+(t||"").replace('"','""')+'"')
             })) : d.eachCols(e, function (e, a) {
-                a.field && "normal" == a.type && !a.hide && (0 == t && i.push(a.title || ""), n.push(l[a.field]))
-            }), a.push(n.join(","))
+                a.field && "normal" == a.type && !a.hide && (0 == t && i.push((a.title || "")), n.push('"'+(l[a.field]||"")+'"'))
+            }), a.push(n.join(','))
         });
-        var data = i.join(",") + "\r\n" + a.join("\r\n")
+        var data =i.join(',') + "\r\n" + a.join("\r\n")
         navigator.msSaveBlob(new Blob(['\ufeff' + data], {type: meta + ';charset=utf-8;'}), title + '.' + type)
     } else {
         return n.href = "data:" + l + ";charset=utf-8,\ufeff" + encodeURIComponent(function () {
@@ -38,12 +38,12 @@
             return layui.each(t, function (t, l) {
                 var n = [];
                 "object" == typeof e ? (layui.each(e, function (e, a) {
-                    0 == t && i.push(a || "")
+                    0 == t && i.push((a || ""))
                 }), layui.each(d.clearCacheKey(l), function (e, t) {
-                    n.push(t)
+                    n.push('"'+(t||"").replace('"','""')+'"')
                 })) : d.eachCols(e, function (e, a) {
-                    a.field && "normal" == a.type && !a.hide && (0 == t && i.push(a.title || ""), n.push(l[a.field]))
-                }), a.push(n.join(","))
-            }), i.join(",") + "\r\n" + a.join("\r\n")
+                    a.field && "normal" == a.type && !a.hide && (0 == t && i.push((a.title || "")), n.push('"'+(l[a.field]||"")+'"'))
+                }), a.push(n.join(','))
+            }), i.join(',') + "\r\n" + a.join("\r\n")
         }()), n.download = (a.title || "table_" + (a.index || "")) + "." + i, document.body.appendChild(n), n.click(), void document.body.removeChild(n)}
 },d.resize=function(e){if(e){var t=s(e);if(!t)return;c.that[e].resize()}else layui.each(c.that,function(){this.resize()})},d.reload=function(e,t){var i=s(e);if(i){var a=c.that[e];return a.reload(t),c.call(a)}},d.render=function(e){var t=new F(e);return c.call(t)},d.clearCacheKey=function(e){return e=t.extend({},e),delete e[d.config.checkName],delete e[d.config.indexName],e},d.init(),e(y,d)});
