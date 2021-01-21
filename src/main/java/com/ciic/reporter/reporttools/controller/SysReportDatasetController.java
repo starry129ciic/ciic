@@ -4,6 +4,8 @@ package com.ciic.reporter.reporttools.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ciic.reporter.common.StatusEnum;
+import com.ciic.reporter.dbManage.entity.SysDatasource;
+import com.ciic.reporter.dbManage.service.ISysDatasourceService;
 import com.ciic.reporter.reporttools.entity.ReportShow;
 import com.ciic.reporter.reporttools.entity.SysDataset;
 import com.ciic.reporter.reporttools.entity.SysReportData;
@@ -32,7 +34,8 @@ public class SysReportDatasetController {
 
     @Autowired
     private ISysDatasetService sysDatasetService;
-
+    @Autowired
+    private ISysDatasourceService sysDatasourceService;
     @Autowired
     IDataService dataService;
 
@@ -175,6 +178,14 @@ public class SysReportDatasetController {
         {
             return "<span>查询数据失败</span>";
         }
+        //根据DbSourceId  获取DbDriver;
+        QueryWrapper<SysDatasource> querySysDatasource=new QueryWrapper<>();
+        querySysDatasource.eq("db_code",dataset.getDbSourceId());
+        SysDatasource dataSource=sysDatasourceService.getOne(querySysDatasource);
+        if(dataSource==null|| StringUtils.isEmpty(dataSource.getDbDriver()))
+        {
+            return "<span>数据源获取失败</span>";
+        }
         //如果没有选择任何数据集的列,则不保存,需要报错到前台.
         if(columns.length()<1)
         {
@@ -190,8 +201,11 @@ public class SysReportDatasetController {
         {
             orderby="order by "+orderby.substring(1);
         }
-        sql=sql+columns +" from ("+dataset.getDsId()+") t1 where "+where+" "+groupby+" "+orderby +" limit 0,1";
-
+        if("oracle.jdbc.OracleDriver".equals(dataSource.getDbDriver())){
+            sql = sql + columns + " from (" + dataset.getDsId() + ") t1 where " + where + " and rownum=1 " + groupby + " " + orderby ;
+        }else {
+            sql = sql + columns + " from (" + dataset.getDsId() + ") t1 where " + where + " " + groupby + " " + orderby + " limit 0,1";
+        }
          List<Map<String, Object>> dataList = dataService.getData(dataset.getDbSourceId(), sql);
         if(dataList==null|| dataList.size()<1)
         {

@@ -1,12 +1,15 @@
 package com.ciic.reporter.dbManage.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlLike;
 import com.ciic.reporter.common.StatusEnum;
 import com.ciic.reporter.cusmain.entity.CusMain;
 import com.ciic.reporter.dbManage.entity.SysDataset;
 import com.ciic.reporter.dbManage.entity.SysDatasetDetail;
+import com.ciic.reporter.dbManage.entity.SysDatasource;
 import com.ciic.reporter.dbManage.service.ISysDatasetDetailService;
+import com.ciic.reporter.dbManage.service.ISysDatasourceService;
 import com.ciic.reporter.service.IDataService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
@@ -34,6 +37,8 @@ public class SysDatasetDetailController {
     IDataService dataService;
     @Autowired
     private ISysDatasetDetailService sysDatasetDetailService;
+    @Autowired
+    private ISysDatasourceService sysDatasourceService;
 
     @PostMapping("/addDatasetDetail")
     @ResponseBody
@@ -195,36 +200,47 @@ public class SysDatasetDetailController {
         String sqlContentValue = sqlContent.substring(sqlContent.indexOf(":") + 2, sqlContent.length() - 2).toLowerCase();
         if (sqlContentValue != null && !"".equals(sqlContentValue)) {
             String sqlContentChild = sqlContentValue.substring(sqlContentValue.indexOf("select") + 6, sqlContentValue.indexOf("from") - 1);
-            if ("*".equals(sqlContentChild.trim())) {
-                List list = dataService.getData(dbCode,sqlContent +" limit 0,1");
-                if (list != null && list.size() > 0) {
-                    Map<String, String> colMap = (Map) list.get(0);
-                    for (Object key : colMap.keySet()) {
-                        String id = UUID.randomUUID().toString().replace("-", "");
-                        Map map = new HashMap();
-                        map.put("id", id);
-                        map.put("field_id", key.toString().toUpperCase().trim());
-                        map.put("ds_id", dsId);
-                        queryColList.add(map);
+            //根据DbSourceId  获取DbDriver;
+            QueryWrapper<SysDatasource> querySysDatasource = new QueryWrapper<>();
+            querySysDatasource.eq("db_code", dbCode);
+            SysDatasource dataSource = sysDatasourceService.getOne(querySysDatasource);
+            if (dataSource != null) {
+                if ("*".equals(sqlContentChild.trim())) {
+                    List list =null;
+                    if("oracle.jdbc.OracleDriver".equals(dataSource.getDbDriver())){
+                        list = dataService.getData(dbCode, "select * from (" +sqlContent+ ") aaa where rownum=1" );
+                    }else {
+                        list = dataService.getData(dbCode, sqlContent + " limit 0,1");
                     }
-                }
-            } else {
-                String[] cols = sqlContentChild.split(",");
-                for (String col : cols) {
-                    Map fieldMap = new HashMap();
-                    if (StringUtils.isNotEmpty(col) && col.indexOf("as") == -1) {
-                        String id = UUID.randomUUID().toString().replace("-", "");
-                        fieldMap.put("field_id", col.toUpperCase().trim());
-                        fieldMap.put("id", id);
-                        fieldMap.put("ds_id",dsId);
-                        colList.add(fieldMap);
-                    } else {
-                        col = col.substring(col.indexOf("as") + 2, col.length()).trim();
-                        String id = UUID.randomUUID().toString().replace("-", "");
-                        fieldMap.put("field_id", col.toUpperCase().trim());
-                        fieldMap.put("id", id);
-                        fieldMap.put("ds_id", dsId);
-                        colList.add(fieldMap);
+                    if (list != null && list.size() > 0) {
+                        Map<String, String> colMap = (Map) list.get(0);
+                        for (Object key : colMap.keySet()) {
+                            String id = UUID.randomUUID().toString().replace("-", "");
+                            Map map = new HashMap();
+                            map.put("id", id);
+                            map.put("field_id", key.toString().toUpperCase().trim());
+                            map.put("ds_id", dsId);
+                            queryColList.add(map);
+                        }
+                    }
+                } else {
+                    String[] cols = sqlContentChild.split(",");
+                    for (String col : cols) {
+                        Map fieldMap = new HashMap();
+                        if (StringUtils.isNotEmpty(col) && col.indexOf("as") == -1) {
+                            String id = UUID.randomUUID().toString().replace("-", "");
+                            fieldMap.put("field_id", col.toUpperCase().trim());
+                            fieldMap.put("id", id);
+                            fieldMap.put("ds_id", dsId);
+                            colList.add(fieldMap);
+                        } else {
+                            col = col.substring(col.indexOf("as") + 2, col.length()).trim();
+                            String id = UUID.randomUUID().toString().replace("-", "");
+                            fieldMap.put("field_id", col.toUpperCase().trim());
+                            fieldMap.put("id", id);
+                            fieldMap.put("ds_id", dsId);
+                            colList.add(fieldMap);
+                        }
                     }
                 }
             }
