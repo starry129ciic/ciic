@@ -76,7 +76,7 @@ public class ShowDataController {
             }
 
         //找到需要执行的所有语句并执行。
-        String mainRP = "select data_source_id,report_select_sql,sd.db_driver from sys_report_data sp join sys_datasource sd on sp.data_source_id=sd.id where code='" + datasid + "'";
+        String mainRP = "select data_source_id,report_select_sql,sd.db_driver from sys_report_data sp join sys_datasource sd on sp.data_source_id=sd.db_code where code='" + datasid + "'";
         List<Map<String, Object>> mainRPL = dataService.getData("first", mainRP);
         Map<String, Object> mainSqlMap = mainRPL.get(0);
         String datasource_id = mainSqlMap.get("data_source_id") == null ? "" : mainSqlMap.get("data_source_id").toString();
