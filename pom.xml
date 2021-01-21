@@ -126,9 +126,9 @@
 
         <!--orcale数据库依赖-->
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc10</artifactId>
-            <version>19.7.0.0</version>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.1.0.2.0</version>
         </dependency>
         <!--MySQL 连接驱动依赖-->
         <dependency>

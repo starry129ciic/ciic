@@ -76,7 +76,7 @@ public class ShowDataController {
             }
 
         //找到需要执行的所有语句并执行。
-        String mainRP = "select * from sys_report_data sp, report_show p  where sp.id=p.report_id and code='" + datasid + "'";
+        String mainRP = "select data_source_id,report_select_sql,sd.db_driver from sys_report_data sp join sys_datasource sd on sp.data_source_id=sd.id where code='" + datasid + "'";
         List<Map<String, Object>> mainRPL = dataService.getData("first", mainRP);
         Map<String, Object> mainSqlMap = mainRPL.get(0);
         String datasource_id = mainSqlMap.get("data_source_id") == null ? "" : mainSqlMap.get("data_source_id").toString();
@@ -89,6 +89,7 @@ public class ShowDataController {
 //                dataService.getData(datasource_id, tempSql);
 //            }
 //        }
+        String dbDriver=mainSqlMap.get("db_driver") == null ? "" : mainSqlMap.get("db_driver").toString();
         //组装where条件
         String where = "";
         //查询主数据的条件
@@ -124,11 +125,23 @@ public class ShowDataController {
 
         int count = 10;
         String selectCountsSql = "select count(*) AS decount from (" +  mainSql + ") a";
-        if (!StringUtils.isEmpty(selectCountsSql)) {
-            count = Integer.parseInt(dataService.getData(datasource_id, selectCountsSql).get(0).get("decount").toString());
+        String endSql = mainSql + " limit " + ((page - 1) * limit) + "," + (page * limit);
+        if("oracle.jdbc.OracleDriver".equals(dbDriver)) {
+            selectCountsSql = "select count(1) AS \"decount\" from (" +  mainSql + ") a";
+            if (!StringUtils.isEmpty(selectCountsSql)) {
+                count = Integer.parseInt(dataService.getData(datasource_id, selectCountsSql).get(0).get("decount").toString());
+            }
+            endSql ="select *" +
+                    "  from (select t.*, rownum as no" +
+                    "          from ("+mainSql+") t) " +
+                    " where no between "+((page - 1) * limit)+" and "+(page * limit);
+        }else
+        {
+            if (!StringUtils.isEmpty(selectCountsSql)) {
+                count = Integer.parseInt(dataService.getData(datasource_id, selectCountsSql).get(0).get("decount").toString());
+            }
         }
 
-        String endSql = mainSql + " limit " + ((page - 1) * limit) + "," + (page * limit);
 
         List<Map<String, Object>> dataList = null;
         //如果是导出查询所有数据
